@@ -12,6 +12,10 @@
 #include "tv.h"
 #include "wallclock.h"
 
+// gLocalTime already runs at 4x (TIME_SCALE in rtc.c).
+// Berries get an extra 4x on top of that: 4 * 4 = 16x real time.
+#define BERRY_EXTRA_SCALE 4
+
 static void UpdatePerDay(struct Time *localTime);
 static void UpdatePerMinute(struct Time *localTime);
 
@@ -67,7 +71,7 @@ static void UpdatePerMinute(struct Time *localTime)
     {
         if (minutes >= 0)
         {
-            BerryTreeTimeUpdate(minutes);
+            BerryTreeTimeUpdate(minutes * BERRY_EXTRA_SCALE);
             gSaveBlock2Ptr->lastBerryTreeUpdate = *localTime;
         }
     }
