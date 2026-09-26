@@ -1042,13 +1042,12 @@ static bool32 UpdateMatchCallMinutesCounter(void)
 {
     int curMinutes;
     RtcCalcLocalTime();
-    curMinutes = GetCurrentTotalMinutes(&gLocalTime);
+    curMinutes = ((gLocalTime.days * 24 * 60) + (gLocalTime.hours * 60) + gLocalTime.minutes) / 4;  // undo 4x clock
     if (sMatchCallState.minutes > curMinutes || curMinutes - sMatchCallState.minutes > 9)
     {
         sMatchCallState.minutes = curMinutes;
         return TRUE;
     }
-
     return FALSE;
 }
 
